@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout — Farmizen</title>
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <!-- Farmizen Checkout CSS -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/common.css"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar navbar-expand-lg fz-navbar sticky-top px-3">
+  <div class="container-fluid">
+    <a href="index.html" class="navbar-brand d-flex align-items-center gap-2">
+      <div class="fz-brand-icon">🌿</div>
+      <span class="fz-brand-name">Farmizen</span>
+    </a>
+    <!-- Checkout Steps -->
+    <div class="fz-steps d-none d-md-flex">
+      <div class="fz-step active" id="step-1">
+        <span class="fz-step-num">1</span>
+        <span class="fz-step-label">Delivery</span>
+      </div>
+      <div class="fz-step-line"></div>
+      <div class="fz-step" id="step-2">
+        <span class="fz-step-num">2</span>
+        <span class="fz-step-label">Payment</span>
+      </div>
+      <div class="fz-step-line"></div>
+      <div class="fz-step" id="step-3">
+        <span class="fz-step-num">3</span>
+        <span class="fz-step-label">Review</span>
+      </div>
+    </div>
+    <a href="cart.html" class="fz-back-link d-flex align-items-center gap-1">
+      ← Back to Cart
+    </a>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<div class="container-xl py-4 pb-5">
+  <div class="row g-4">
+
+    <!-- LEFT: Form Steps -->
+    <div class="col-lg-7">
+
+      <!-- ══ STEP 1: DELIVERY ══ -->
+      <div class="fz-step-section active" id="section-delivery">
+        <div class="fz-section-card">
+          <div class="fz-section-header">
+            <span class="fz-section-num">1</span>
+            <div>
+              <div class="fz-section-title">Delivery Details</div>
+              <div class="fz-section-sub">Where should we deliver your order?</div>
+            </div>
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-6">
+              <div class="fz-form-group" id="grp-fname">
+                <label>First Name <span class="req">*</span></label>
+                <input type="text" id="fname" placeholder="Ramesh"/>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="fz-form-group" id="grp-lname">
+                <label>Last Name <span class="req">*</span></label>
+                <input type="text" id="lname" placeholder="Sharma"/>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="fz-form-group" id="grp-phone">
+                <label>Phone Number <span class="req">*</span></label>
+                <input type="tel" id="phone" placeholder="9876543210" maxlength="10"/>
+                <div class="fz-error-text">Enter valid 10-digit number</div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="fz-form-group" id="grp-address">
+                <label>Full Address <span class="req">*</span></label>
+                <textarea id="address" rows="2" placeholder="House no., Street, Area..."></textarea>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="fz-form-group" id="grp-city">
+                <label>City <span class="req">*</span></label>
+                <input type="text" id="city" placeholder="Jaipur"/>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="fz-form-group" id="grp-pincode">
+                <label>Pincode <span class="req">*</span></label>
+                <input type="text" id="pincode" placeholder="302001" maxlength="6"/>
+                <div class="fz-error-text">Enter valid 6-digit pincode</div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="fz-form-group">
+                <label>State</label>
+                <select id="state">
+                  <option value="Rajasthan" selected>Rajasthan</option>
+                  <option>Gujarat</option>
+                  <option>Maharashtra</option>
+                  <option>Madhya Pradesh</option>
+                  <option>Uttar Pradesh</option>
+                  <option>Punjab</option>
+                  <option>Haryana</option>
+                  <option>Delhi</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Delivery Type -->
+            <div class="col-12">
+              <label class="fz-field-label mb-2">Delivery Preference</label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="fz-delivery-option active" id="opt-delivery" onclick="selectDelivery('delivery')">
+                    <span class="fz-delivery-icon">🚚</span>
+                    <div>
+                      <div class="fz-delivery-title">Home Delivery</div>
+                      <div class="fz-delivery-sub">FREE · 1–2 days</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="fz-delivery-option" id="opt-pickup" onclick="selectDelivery('pickup')">
+                    <span class="fz-delivery-icon">🏪</span>
+                    <div>
+                      <div class="fz-delivery-title">Self Pickup</div>
+                      <div class="fz-delivery-sub">FREE · From farmer</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Delivery Note -->
+            <div class="col-12">
+              <div class="fz-form-group">
+                <label>Delivery Note <span class="fz-optional">(optional)</span></label>
+                <input type="text" id="note" placeholder="e.g. Leave at gate, call before delivery..."/>
+              </div>
+            </div>
+          </div>
+
+          <button class="fz-btn-next mt-3" onclick="goToStep(2)">
+            Continue to Payment →
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 2: PAYMENT ══ -->
+      <div class="fz-step-section" id="section-payment">
+        <div class="fz-section-card">
+          <div class="fz-section-header">
+            <span class="fz-section-num">2</span>
+            <div>
+              <div class="fz-section-title">Payment Method</div>
+              <div class="fz-section-sub">Choose how you want to pay</div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column gap-3 mt-3">
+
+            <!-- UPI -->
+            <div class="fz-payment-option active" id="pay-upi" onclick="selectPayment('upi')">
+              <div class="d-flex align-items-center gap-3">
+                <span class="fz-pay-icon">📱</span>
+                <div class="flex-1">
+                  <div class="fz-pay-title">UPI Payment</div>
+                  <div class="fz-pay-sub">PhonePe, GPay, Paytm, BHIM</div>
+                </div>
+                <div class="fz-pay-radio" id="radio-upi">●</div>
+              </div>
+              <div class="fz-upi-input mt-3" id="upi-input-wrap">
+                <div class="fz-form-group" id="grp-upi">
+                  <label>UPI ID <span class="req">*</span></label>
+                  <input type="text" id="upi-id" placeholder="yourname@upi"/>
+                  <div class="fz-error-text">Enter valid UPI ID</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card -->
+            <div class="fz-payment-option" id="pay-card" onclick="selectPayment('card')">
+              <div class="d-flex align-items-center gap-3">
+                <span class="fz-pay-icon">💳</span>
+                <div class="flex-1">
+                  <div class="fz-pay-title">Credit / Debit Card</div>
+                  <div class="fz-pay-sub">Visa, Mastercard, RuPay</div>
+                </div>
+                <div class="fz-pay-radio" id="radio-card">○</div>
+              </div>
+              <div class="fz-card-input mt-3" id="card-input-wrap" style="display:none;">
+                <div class="fz-form-group" id="grp-cardnum">
+                  <label>Card Number <span class="req">*</span></label>
+                  <input type="text" id="card-num" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)"/>
+                  <div class="fz-error-text">Enter valid card number</div>
+                </div>
+                <div class="row g-2 mt-1">
+                  <div class="col-6">
+                    <div class="fz-form-group" id="grp-expiry">
+                      <label>Expiry <span class="req">*</span></label>
+                      <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)"/>
+                      <div class="fz-error-text">Invalid expiry</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="fz-form-group" id="grp-cvv">
+                      <label>CVV <span class="req">*</span></label>
+                      <input type="password" id="cvv" placeholder="•••" maxlength="3"/>
+                      <div class="fz-error-text">Invalid CVV</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cash on Delivery -->
+            <div class="fz-payment-option" id="pay-cod" onclick="selectPayment('cod')">
+              <div class="d-flex align-items-center gap-3">
+                <span class="fz-pay-icon">💵</span>
+                <div class="flex-1">
+                  <div class="fz-pay-title">Cash on Delivery</div>
+                  <div class="fz-pay-sub">Pay when you receive</div>
+                </div>
+                <div class="fz-pay-radio" id="radio-cod">○</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="d-flex gap-2 mt-4">
+            <button class="fz-btn-back" onclick="goToStep(1)">← Back</button>
+            <button class="fz-btn-next flex-1" onclick="goToStep(3)">Review Order →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3: REVIEW ══ -->
+      <div class="fz-step-section" id="section-review">
+        <div class="fz-section-card">
+          <div class="fz-section-header">
+            <span class="fz-section-num">3</span>
+            <div>
+              <div class="fz-section-title">Review & Place Order</div>
+              <div class="fz-section-sub">Confirm your order details</div>
+            </div>
+          </div>
+
+          <!-- Delivery Summary -->
+          <div class="fz-review-block mt-3">
+            <div class="fz-review-block-header">
+              <span>📍 Delivery Details</span>
+              <button onclick="goToStep(1)">Edit</button>
+            </div>
+            <div id="review-delivery" class="fz-review-content"></div>
+          </div>
+
+          <!-- Payment Summary -->
+          <div class="fz-review-block mt-3">
+            <div class="fz-review-block-header">
+              <span>💳 Payment</span>
+              <button onclick="goToStep(2)">Edit</button>
+            </div>
+            <div id="review-payment" class="fz-review-content"></div>
+          </div>
+
+          <!-- Items Summary -->
+          <div class="fz-review-block mt-3">
+            <div class="fz-review-block-header">
+              <span>🛒 Order Items</span>
+              <a href="cart.html">Edit</a>
+            </div>
+            <div id="review-items" class="fz-review-content"></div>
+          </div>
+
+          <!-- Terms -->
+          <div class="fz-terms mt-3">
+            <input type="checkbox" id="terms-check" class="fz-check"/>
+            <label for="terms-check">
+              I agree to the <a href="#">Terms & Conditions</a> and confirm my order details are correct.
+            </label>
+          </div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="fz-btn-back" onclick="goToStep(2)">← Back</button>
+            <button class="fz-btn-place flex-1" onclick="placeOrder()">
+              🌱 Place Order · ₹<span id="final-total">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Order Summary -->
+    <div class="col-lg-5">
+      <div class="fz-summary-card">
+        <div class="fz-summary-title">Order Summary</div>
+        <div id="summary-items"></div>
+        <div class="fz-summary-divider"></div>
+        <div class="fz-summary-row">
+          <span>Subtotal</span>
+          <span>₹<span id="s-subtotal">0</span></span>
+        </div>
+        <div class="fz-summary-row" id="s-discount-row" style="display:none;">
+          <span>Discount</span>
+          <span class="fz-discount-tag">−₹<span id="s-discount">0</span></span>
+        </div>
+        <div class="fz-summary-row">
+          <span>Delivery</span>
+          <span class="fz-free-tag">FREE</span>
+        </div>
+        <div class="fz-summary-divider"></div>
+        <div class="fz-summary-total">
+          <span>Total</span>
+          <span>₹<span id="s-total">0</span></span>
+        </div>
+        <div class="fz-secure-note mt-3">
+          <span>🔒</span>
+          <span>100% secure checkout. Your data is safe.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="fz-toast" id="toast"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Farmizen Checkout JS -->
+<script src="js/checkout.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart — Farmizen</title>
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <!-- Farmizen Cart CSS -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/common.css"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar navbar-expand-lg fz-navbar sticky-top px-3">
+  <div class="container-fluid">
+    <a href="index.html" class="navbar-brand d-flex align-items-center gap-2">
+      <div class="fz-brand-icon">🌿</div>
+      <span class="fz-brand-name">Farmizen</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item"><a href="marketplace.html" class="nav-link fz-nav-link">Marketplace</a></li>
+        <li class="nav-item"><a href="farmland.html"    class="nav-link fz-nav-link">Farmland</a></li>
+        <li class="nav-item"><a href="learning.html"    class="nav-link fz-nav-link">Learn</a></li>
+        <li class="nav-item"><a href="community.html"   class="nav-link fz-nav-link">Community</a></li>
+        <li class="nav-item"><a href="farmstay.html"    class="nav-link fz-nav-link">Farmstays</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ── BREADCRUMB ── -->
+<div class="container-xl">
+  <div class="fz-breadcrumb">
+    <a href="index.html">Home</a>
+    <span class="sep">›</span>
+    <a href="marketplace.html">Marketplace</a>
+    <span class="sep">›</span>
+    <span>Cart</span>
+  </div>
+</div>
+
+<!-- ── PAGE TITLE ── -->
+<div class="container-xl mb-4">
+  <h1 class="fz-page-title">Your <span>Cart</span></h1>
+  <p class="fz-page-sub" id="cart-count-text">Loading...</p>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="container-xl pb-5">
+  <div class="row g-4" id="cart-main">
+
+    <!-- LEFT: Cart Items -->
+    <div class="col-lg-8" id="cart-items-col">
+      <div id="cart-items-list"></div>
+
+      <!-- Empty State -->
+      <div class="fz-empty-state" id="empty-cart">
+        <div class="fz-empty-icon">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Add fresh produce from the marketplace to get started.</p>
+        <a href="marketplace.html" class="fz-btn-primary mt-3 d-inline-flex align-items-center gap-2">
+          🌿 Browse Marketplace
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Order Summary -->
+    <div class="col-lg-4" id="summary-col">
+      <div class="fz-summary-card">
+
+        <div class="fz-summary-title">Order Summary</div>
+
+        <div class="fz-summary-row">
+          <span>Subtotal (<span id="item-count">0</span> items)</span>
+          <span>₹<span id="subtotal">0</span></span>
+        </div>
+        <div class="fz-summary-row">
+          <span>Delivery</span>
+          <span class="fz-free-tag" id="delivery-text">FREE</span>
+        </div>
+        <div class="fz-summary-row">
+          <span>Platform Fee</span>
+          <span>₹0</span>
+        </div>
+
+        <div class="fz-summary-divider"></div>
+
+        <div class="fz-summary-total">
+          <span>Total</span>
+          <span>₹<span id="grand-total">0</span></span>
+        </div>
+
+        <div class="fz-summary-note">
+          <span>🌿</span>
+          <span>You're buying directly from local farmers. No middlemen!</span>
+        </div>
+
+        <button class="fz-btn-checkout mt-3" onclick="proceedToCheckout()">
+          Proceed to Checkout →
+        </button>
+
+        <a href="marketplace.html" class="fz-btn-continue mt-2 d-block text-center">
+          ← Continue Shopping
+        </a>
+
+        <!-- Promo Code -->
+        <div class="fz-summary-divider mt-3"></div>
+        <div class="fz-promo-label">Have a promo code?</div>
+        <div class="fz-promo-row">
+          <input type="text" id="promo-input" class="fz-promo-input" placeholder="Enter code"/>
+          <button class="fz-promo-btn" onclick="applyPromo()">Apply</button>
+        </div>
+        <div class="fz-promo-msg" id="promo-msg"></div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="fz-toast" id="toast"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Farmizen Cart JS -->
+<script src="js/cart.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

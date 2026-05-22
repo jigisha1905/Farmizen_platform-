@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marketplace — Farmizen</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/common.css"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <a href="index.html" class="brand">
+    <div class="brand-icon">🌿</div>
+    <span class="brand-name">Farmizen</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="marketplace.html" class="active">Marketplace</a></li>
+    <li><a href="farmland.html">Farmland</a></li>
+    <li><a href="learning.html">Learn</a></li>
+    <li><a href="community.html">Community</a></li>
+    <li><a href="farmstay.html">Farmstays</a></li>
+  </ul>
+  <div class="nav-right">
+    <span class="role-badge farmer" id="role-badge">🌾 Farmer</span>
+    <button class="btn-switch" onclick="switchRole()">Switch to Consumer</button>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <h1>Fresh <span>Marketplace</span></h1>
+  <p id="header-sub">Manage your produce listings or add new ones.</p>
+
+  <div class="tabs">
+    <div id="consumer-tabs" style="display:none;">
+      <button class="tab-btn active" onclick="showTab('browse')">🛒 Browse Produce</button>
+    </div>
+    <div id="farmer-tabs" style="display:flex;">
+      <button class="tab-btn active" id="tab-my"  onclick="showTab('my-listings')">📦 My Listings</button>
+      <button class="tab-btn"        id="tab-add" onclick="showTab('add-listing')">➕ Add Listing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- ══ CONSUMER: BROWSE ══ -->
+  <div class="tab-section active" id="section-browse">
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input"
+               placeholder="Search produce, farmer, location..."
+               oninput="filterListings()"/>
+      </div>
+      <select class="filter-select" id="filter-category" onchange="filterListings()">
+        <option value="">All Categories</option>
+        <option>Vegetables</option>
+        <option>Fruits</option>
+        <option>Grains & Pulses</option>
+        <option>Dairy & Eggs</option>
+        <option>Herbs & Spices</option>
+        <option>Organic Products</option>
+      </select>
+      <select class="filter-select" id="filter-sort" onchange="filterListings()">
+        <option value="">Sort by</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="newest">Newest First</option>
+      </select>
+      <span class="results-count" id="results-count">12 listings</span>
+    </div>
+
+    <div class="listings-grid" id="listings-grid"></div>
+    <div class="empty-state" id="empty-browse">
+      <div class="empty-icon">🌾</div>
+      <h3>No produce found</h3>
+      <p>Try changing your search or filters.</p>
+    </div>
+  </div>
+
+  <!-- ══ FARMER: MY LISTINGS ══ -->
+  <div class="tab-section" id="section-my-listings">
+    <div class="farmer-header">
+      <h2>My Listings</h2>
+      <button class="btn-add" onclick="showTab('add-listing')">➕ Add New Produce</button>
+    </div>
+    <div class="farmer-listings" id="farmer-listings-list"></div>
+    <div class="empty-state" id="empty-farmer">
+      <div class="empty-icon">🌱</div>
+      <h3>No listings yet</h3>
+      <p>Add your first produce listing to get started.</p>
+    </div>
+  </div>
+
+  <!-- ══ FARMER: ADD / EDIT LISTING ══ -->
+  <div class="tab-section" id="section-add-listing">
+    <div class="add-form-section">
+      <h2 id="form-title">🌱 Add New Listing</h2>
+
+      <div class="section-label">Produce Details</div>
+
+      <div class="form-group" id="grp-name">
+        <label>Produce Name <span class="req">*</span></label>
+        <input type="text" id="f-name" placeholder="e.g. Organic Tomatoes"/>
+        <div class="error-text">Please enter the produce name.</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" id="grp-category">
+          <label>Category <span class="req">*</span></label>
+          <select id="f-category">
+            <option value="">Select category</option>
+            <option>Vegetables</option>
+            <option>Fruits</option>
+            <option>Grains & Pulses</option>
+            <option>Dairy & Eggs</option>
+            <option>Herbs & Spices</option>
+            <option>Organic Products</option>
+          </select>
+          <div class="error-text">Please select a category.</div>
+        </div>
+        <div class="form-group" id="grp-qty">
+          <label>Quantity Available <span class="req">*</span></label>
+          <input type="number" id="f-qty" placeholder="e.g. 50 kg" min="1"/>
+          <div class="error-text">Please enter quantity.</div>
+        </div>
+      </div>
+
+      <div class="form-group" id="grp-price">
+        <label>Price <span class="req">*</span></label>
+        <div class="price-row">
+          <input type="number" id="f-price" placeholder="e.g. 40" min="0"/>
+          <select id="f-unit">
+            <option value="per kg">₹ per kg</option>
+            <option value="per dozen">₹ per dozen</option>
+            <option value="per piece">₹ per piece</option>
+            <option value="per litre">₹ per litre</option>
+            <option value="per bundle">₹ per bundle</option>
+          </select>
+        </div>
+        <div class="error-text">Please enter the price.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="f-desc" placeholder="How it's grown, freshness, certifications..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <div class="toggle-row">
+          <span class="toggle-label">Available for immediate pickup</span>
+          <label class="toggle">
+            <input type="checkbox" id="f-available" checked/>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+      <div class="section-label">Location & Contact</div>
+
+      <div class="form-row">
+        <div class="form-group" id="grp-location">
+          <label>Village / City <span class="req">*</span></label>
+          <input type="text" id="f-location" placeholder="e.g. Jaipur, Rajasthan"/>
+          <div class="error-text">Please enter location.</div>
+        </div>
+        <div class="form-group">
+          <label>Pincode</label>
+          <input type="text" id="f-pincode" placeholder="e.g. 302001" maxlength="6"/>
+        </div>
+      </div>
+
+      <div class="form-group" id="grp-phone">
+        <label>WhatsApp / Phone <span class="req">*</span></label>
+        <input type="tel" id="f-phone" placeholder="e.g. 8107161922" maxlength="10"/>
+        <div class="error-text">8107161922.</div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-actions">
+        <button class="btn-submit" onclick="submitListing()">🌱 Publish Listing</button>
+        <button class="btn-cancel" onclick="showTab('my-listings')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ── PRODUCT DETAIL MODAL ── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-emoji"    id="m-emoji"></div>
+    <div class="modal-category" id="m-category"></div>
+    <div class="modal-name"     id="m-name"></div>
+    <div class="modal-price"    id="m-price"></div>
+    <div class="modal-details">
+      <div class="detail-item"><div class="detail-label">QUANTITY</div>   <div class="detail-value" id="m-qty"></div></div>
+      <div class="detail-item"><div class="detail-label">LOCATION</div>   <div class="detail-value" id="m-location"></div></div>
+      <div class="detail-item"><div class="detail-label">AVAILABILITY</div><div class="detail-value" id="m-avail"></div></div>
+      <div class="detail-item"><div class="detail-label">FARMER</div>     <div class="detail-value" id="m-farmer"></div></div>
+    </div>
+    <p class="modal-desc" id="m-desc"></p>
+    <div class="modal-divider"></div>
+    <div class="contact-section">
+      <h4>📞 Contact Farmer</h4>
+      <div class="contact-btns">
+        <button class="btn-whatsapp" id="m-whatsapp">💬 WhatsApp</button>
+        <button class="btn-call"     id="m-call">📱 Call</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<!-- ── SCRIPTS ── -->
+<script src="js/marketplace.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

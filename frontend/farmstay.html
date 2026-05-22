@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farmstays — Farmizen</title>
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <!-- Farmizen Common + Farmstay CSS -->
+  <link rel="stylesheet" href="css/common.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar navbar-expand-lg fz-navbar sticky-top px-3">
+  <div class="container-fluid">
+    <a href="index.html" class="navbar-brand d-flex align-items-center gap-2">
+      <div class="fz-brand-icon">🌿</div>
+      <span class="fz-brand-name">Farmizen</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item"><a href="marketplace.html" class="nav-link fz-nav-link">Marketplace</a></li>
+        <li class="nav-item"><a href="farmland.html"    class="nav-link fz-nav-link">Farmland</a></li>
+        <li class="nav-item"><a href="learning.html"    class="nav-link fz-nav-link">Learn</a></li>
+        <li class="nav-item"><a href="community.html"   class="nav-link fz-nav-link">Community</a></li>
+        <li class="nav-item"><a href="farmstay.html"    class="nav-link fz-nav-link active">Farmstays</a></li>
+      </ul>
+    </div>
+    <div class="d-flex align-items-center gap-2 ms-3">
+      <span class="fz-role-badge host" id="role-badge">🏡 Guest</span>
+      <button class="fz-btn-switch" onclick="switchRole()">Switch to Host</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="fz-page-header">
+  <div class="container-xl">
+    <h1 class="fz-page-title">Farm <span>Stays</span></h1>
+    <p class="fz-page-sub" id="header-sub">Experience farm life. Stay with local farmers.</p>
+
+    <!-- Tabs -->
+    <div class="fz-tabs">
+      <!-- Guest tabs -->
+      <div id="guest-tabs" style="display:flex;">
+        <button class="fz-tab active" onclick="showTab('browse')">🔍 Find Stays</button>
+      </div>
+      <!-- Host tabs -->
+      <div id="host-tabs" style="display:none;">
+        <button class="fz-tab active" id="tab-my" onclick="showTab('my-stays')">🏡 My Stays</button>
+        <button class="fz-tab" id="tab-add" onclick="showTab('add-stay')">➕ Add Farmstay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="container-xl py-4 pb-5">
+
+  <!-- ══ GUEST: BROWSE STAYS ══ -->
+  <div class="fz-section" id="section-browse">
+
+    <!-- Search Bar -->
+    <div class="fz-search-section mb-4">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+          <label class="fz-search-label">📍 Where</label>
+          <input type="text" class="fz-search-input" id="search-location" placeholder="City or village..." oninput="filterStays()"/>
+        </div>
+        <div class="col-md-3">
+          <label class="fz-search-label">📅 Check-in</label>
+          <input type="date" class="fz-search-input" id="search-checkin" oninput="filterStays()"/>
+        </div>
+        <div class="col-md-3">
+          <label class="fz-search-label">📅 Check-out</label>
+          <input type="date" class="fz-search-input" id="search-checkout" oninput="filterStays()"/>
+        </div>
+        <div class="col-md-2">
+          <button class="fz-btn-search" onclick="filterStays()">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="fz-filter-bar">
+      <select class="fz-filter-select" id="filter-type" onchange="filterStays()">
+        <option value="">All Types</option>
+        <option>Farm House</option>
+        <option>Cottage</option>
+        <option>Hut</option>
+        <option>Camp Site</option>
+      </select>
+      <select class="fz-filter-select" id="filter-price" onchange="filterStays()">
+        <option value="">Price Range</option>
+        <option value="0-2000">Under ₹2,000</option>
+        <option value="2000-5000">₹2,000 - ₹5,000</option>
+        <option value="5000-10000">₹5,000 - ₹10,000</option>
+        <option value="10000+">₹10,000+</option>
+      </select>
+      <select class="fz-filter-select" id="filter-amenities" onchange="filterStays()">
+        <option value="">Amenities</option>
+        <option value="wifi">WiFi</option>
+        <option value="kitchen">Kitchen</option>
+        <option value="ac">AC</option>
+        <option value="pool">Pool</option>
+      </select>
+      <span class="fz-results-count" id="results-count">12 stays</span>
+    </div>
+
+    <!-- Stays Grid -->
+    <div class="row g-4" id="stays-grid"></div>
+
+    <!-- Empty State -->
+    <div class="fz-empty-state" id="empty-browse">
+      <div class="fz-empty-icon">🏡</div>
+      <h3>No stays found</h3>
+      <p>Try different dates or locations.</p>
+    </div>
+
+  </div>
+
+  <!-- ══ HOST: MY STAYS ══ -->
+  <div class="fz-section" id="section-my-stays" style="display:none;">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h2 class="fz-section-heading">My Farmstays</h2>
+      <button class="fz-btn-add" onclick="showTab('add-stay')">➕ Add Farmstay</button>
+    </div>
+    <div id="my-stays-list"></div>
+    <div class="fz-empty-state" id="empty-my">
+      <div class="fz-empty-icon">🌾</div>
+      <h3>No farmstays yet</h3>
+      <p>Add your first farmstay to start hosting.</p>
+    </div>
+  </div>
+
+  <!-- ══ HOST: ADD / EDIT FARMSTAY ══ -->
+  <div class="fz-section" id="section-add-stay" style="display:none;">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="fz-form-card">
+          <h2 class="fz-form-title" id="form-title">🏡 Add New Farmstay</h2>
+
+          <div class="fz-section-label">Basic Information</div>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="fz-form-group" id="grp-name">
+                <label>Farmstay Name <span class="req">*</span></label>
+                <input type="text" id="f-name" placeholder="e.g. Peaceful Valley Farm Stay"/>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-type">
+                <label>Property Type <span class="req">*</span></label>
+                <select id="f-type">
+                  <option value="">Select type</option>
+                  <option>Farm House</option>
+                  <option>Cottage</option>
+                  <option>Hut</option>
+                  <option>Camp Site</option>
+                </select>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-bedrooms">
+                <label>Bedrooms <span class="req">*</span></label>
+                <input type="number" id="f-bedrooms" placeholder="e.g. 2" min="1"/>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-guests">
+                <label>Max Guests <span class="req">*</span></label>
+                <input type="number" id="f-guests" placeholder="e.g. 6" min="1"/>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-price">
+                <label>Price per Night (₹) <span class="req">*</span></label>
+                <input type="number" id="f-price" placeholder="e.g. 3000" min="0"/>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="fz-form-group">
+                <label>Description</label>
+                <textarea id="f-desc" rows="3" placeholder="Describe your farmstay, activities, surroundings..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Amenities -->
+          <div class="fz-section-label mt-3">Amenities</div>
+
+          <div class="fz-amenities-grid">
+            <label class="fz-amenity-check"><input type="checkbox" value="WiFi"/> 📶 WiFi</label>
+            <label class="fz-amenity-check"><input type="checkbox" value="Kitchen"/> 🍳 Kitchen</label>
+            <label class="fz-amenity-check"><input type="checkbox" value="AC"/> ❄️ AC</label>
+            <label class="fz-amenity-check"><input type="checkbox" value="Hot Water"/> 🚿 Hot Water</label>
+            <label class="fz-amenity-check"><input type="checkbox" value="Pool"/> 🏊 Pool</label>
+            <label class="fz-amenity-check"><input type="checkbox" value="Parking"/> 🚗 Parking</label>
+            <label class="fz-amenity-check"><input type="checkbox" value="Garden"/> 🌳 Garden</label>
+            <label class="fz-amenity-check"><input type="checkbox" value="Bonfire"/> 🔥 Bonfire</label>
+          </div>
+
+          <!-- Activities -->
+          <div class="fz-section-label mt-3">Activities Offered</div>
+
+          <div class="fz-activities-grid">
+            <label class="fz-activity-check"><input type="checkbox" value="Farm Tour"/> 🌾 Farm Tour</label>
+            <label class="fz-activity-check"><input type="checkbox" value="Cooking"/> 👨‍🍳 Cooking Class</label>
+            <label class="fz-activity-check"><input type="checkbox" value="Horse Riding"/> 🐴 Horse Riding</label>
+            <label class="fz-activity-check"><input type="checkbox" value="Yoga"/> 🧘 Yoga</label>
+            <label class="fz-activity-check"><input type="checkbox" value="Photography"/> 📸 Photography</label>
+            <label class="fz-activity-check"><input type="checkbox" value="Stargazing"/> ⭐ Stargazing</label>
+          </div>
+
+          <div class="fz-form-divider"></div>
+          <div class="fz-section-label">Location & Contact</div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-location">
+                <label>Location <span class="req">*</span></label>
+                <input type="text" id="f-location" placeholder="Village, City, State"/>
+                <div class="fz-error-text">Required</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="fz-form-group">
+                <label>Pincode</label>
+                <input type="text" id="f-pincode" placeholder="e.g. 302001" maxlength="6"/>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="fz-form-group" id="grp-phone">
+                <label>Contact Number <span class="req">*</span></label>
+                <input type="tel" id="f-phone" placeholder="e.g. 9876543210" maxlength="10"/>
+                <div class="fz-error-text">Valid 10-digit number</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fz-form-divider"></div>
+
+          <div class="d-flex gap-2">
+            <button class="fz-btn-submit" onclick="submitStay()">🏡 Publish Farmstay</button>
+            <button class="fz-btn-cancel" onclick="showTab('my-stays')">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ── BOOKING MODAL ── -->
+<div class="fz-modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="fz-modal" id="modal">
+    <button class="fz-modal-close" onclick="closeModal()">✕</button>
+
+    <div class="fz-modal-image" id="m-image">🏡</div>
+    <div class="fz-modal-type" id="m-type"></div>
+    <div class="fz-modal-title" id="m-title"></div>
+    <div class="fz-modal-rating" id="m-rating"></div>
+
+    <div class="fz-modal-desc" id="m-desc"></div>
+
+    <div class="fz-modal-details">
+      <div class="fz-md-item"><span>🛏️</span><div><div class="fz-md-label">Bedrooms</div><div class="fz-md-value" id="m-bedrooms"></div></div></div>
+      <div class="fz-md-item"><span>👥</span><div><div class="fz-md-label">Max Guests</div><div class="fz-md-value" id="m-guests"></div></div></div>
+      <div class="fz-md-item"><span>📍</span><div><div class="fz-md-label">Location</div><div class="fz-md-value" id="m-location"></div></div></div>
+      <div class="fz-md-item"><span>💰</span><div><div class="fz-md-label">Price</div><div class="fz-md-value" id="m-price"></div></div></div>
+    </div>
+
+    <!-- Amenities -->
+    <div class="fz-modal-amenities">
+      <h4 class="fz-amenities-title">🛎️ Amenities</h4>
+      <div class="fz-amenities-list" id="m-amenities"></div>
+    </div>
+
+    <!-- Activities -->
+    <div class="fz-modal-activities">
+      <h4 class="fz-activities-title">🎯 Activities</h4>
+      <div class="fz-activities-list" id="m-activities"></div>
+    </div>
+
+    <!-- Booking Form -->
+    <div class="fz-booking-form">
+      <h4 class="fz-booking-title">📅 Book Your Stay</h4>
+      <div class="row g-2">
+        <div class="col-6">
+          <label class="fz-form-label">Check-in</label>
+          <input type="date" id="book-checkin" class="fz-form-input"/>
+        </div>
+        <div class="col-6">
+          <label class="fz-form-label">Check-out</label>
+          <input type="date" id="book-checkout" class="fz-form-input"/>
+        </div>
+      </div>
+      <div class="fz-booking-price mt-3">
+        <span>Total:</span>
+        <span id="book-total">₹0</span>
+      </div>
+      <button class="fz-btn-book mt-3" onclick="bookStay()">Book Now</button>
+      <button class="fz-btn-contact mt-2" onclick="contactHost()">📞 Contact Host</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="fz-toast" id="toast"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Farmizen JS -->
+<script src="js/app.js"></script>
+<script src="js/farmstay.js"></script>
+
+</body>
+</html>

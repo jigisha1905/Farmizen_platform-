@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farmland — Farmizen</title>
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <!-- Farmizen Common + Farmland CSS -->
+  <link rel="stylesheet" href="css/common.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar navbar-expand-lg fz-navbar sticky-top px-3">
+  <div class="container-fluid">
+    <a href="index.html" class="navbar-brand d-flex align-items-center gap-2">
+      <div class="fz-brand-icon">🌿</div>
+      <span class="fz-brand-name">Farmizen</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item"><a href="marketplace.html" class="nav-link fz-nav-link">Marketplace</a></li>
+        <li class="nav-item"><a href="farmland.html"    class="nav-link fz-nav-link active">Farmland</a></li>
+        <li class="nav-item"><a href="learning.html"    class="nav-link fz-nav-link">Learn</a></li>
+        <li class="nav-item"><a href="community.html"   class="nav-link fz-nav-link">Community</a></li>
+        <li class="nav-item"><a href="farmstay.html"    class="nav-link fz-nav-link">Farmstays</a></li>
+      </ul>
+    </div>
+    <div class="d-flex align-items-center gap-2 ms-3">
+      <span class="fz-role-badge farmer" id="role-badge">🌾 Farmer</span>
+      <button class="fz-btn-switch" onclick="switchRole()">Switch to Buyer</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="fz-page-header">
+  <div class="container-xl">
+    <h1 class="fz-page-title">Farmland <span>Listings</span></h1>
+    <p class="fz-page-sub" id="header-sub">List your land for sale or lease.</p>
+
+    <!-- Tabs -->
+    <div class="fz-tabs" id="tab-bar">
+      <!-- Farmer tabs -->
+      <div id="farmer-tabs" style="display:flex;">
+        <button class="fz-tab active" id="tab-my"  onclick="showTab('my-listings')">🗺️ My Listings</button>
+        <button class="fz-tab"        id="tab-add" onclick="showTab('add-listing')">➕ Add Land</button>
+      </div>
+      <!-- Buyer tabs -->
+      <div id="buyer-tabs" style="display:none;">
+        <button class="fz-tab active" onclick="showTab('browse')">🔍 Browse Land</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="container-xl py-4 pb-5">
+
+  <!-- ══ BUYER: BROWSE ══ -->
+  <div class="fz-section" id="section-browse">
+
+    <!-- Filter Bar -->
+    <div class="fz-filter-bar">
+      <div class="fz-search-wrap">
+        <span class="fz-search-icon">🔍</span>
+        <input type="text" class="fz-search-input" id="search-input"
+               placeholder="Search by location, size, type..."
+               oninput="filterLand()"/>
+      </div>
+      <select class="fz-filter-select" id="filter-type" onchange="filterLand()">
+        <option value="">All Types</option>
+        <option>Agricultural</option>
+        <option>Horticultural</option>
+        <option>Organic Farm</option>
+        <option>Grazing Land</option>
+        <option>Mixed Use</option>
+      </select>
+      <select class="fz-filter-select" id="filter-listing" onchange="filterLand()">
+        <option value="">Sale & Lease</option>
+        <option value="Sale">For Sale</option>
+        <option value="Lease">For Lease</option>
+      </select>
+      <select class="fz-filter-select" id="filter-sort" onchange="filterLand()">
+        <option value="">Sort by</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="size-asc">Size: Small to Large</option>
+        <option value="size-desc">Size: Large to Small</option>
+      </select>
+      <span class="fz-results-count" id="results-count">8 listings</span>
+    </div>
+
+    <!-- Land Cards Grid -->
+    <div class="row g-4" id="land-grid"></div>
+
+    <!-- Empty State -->
+    <div class="fz-empty-state" id="empty-browse">
+      <div class="fz-empty-icon">🌾</div>
+      <h3>No land found</h3>
+      <p>Try changing your filters.</p>
+    </div>
+
+  </div>
+
+  <!-- ══ FARMER: MY LISTINGS ══ -->
+  <div class="fz-section" id="section-my-listings" style="display:none;">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h2 class="fz-section-heading">My Land Listings</h2>
+      <button class="fz-btn-add" onclick="showTab('add-listing')">➕ Add New Land</button>
+    </div>
+    <div id="my-land-list"></div>
+    <div class="fz-empty-state" id="empty-my">
+      <div class="fz-empty-icon">🌱</div>
+      <h3>No listings yet</h3>
+      <p>Add your first land listing to get started.</p>
+    </div>
+  </div>
+
+  <!-- ══ FARMER: ADD / EDIT LAND ══ -->
+  <div class="fz-section" id="section-add-listing" style="display:none;">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="fz-form-card">
+          <h2 class="fz-form-title" id="form-title">🌱 Add New Land Listing</h2>
+
+          <div class="fz-section-label">Land Details</div>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="fz-form-group" id="grp-title">
+                <label>Listing Title <span class="req">*</span></label>
+                <input type="text" id="f-title" placeholder="e.g. Fertile Agricultural Land in Jaipur"/>
+                <div class="fz-error-text">Please enter a title.</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-type">
+                <label>Land Type <span class="req">*</span></label>
+                <select id="f-type">
+                  <option value="">Select type</option>
+                  <option>Agricultural</option>
+                  <option>Horticultural</option>
+                  <option>Organic Farm</option>
+                  <option>Grazing Land</option>
+                  <option>Mixed Use</option>
+                </select>
+                <div class="fz-error-text">Please select land type.</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-listing-type">
+                <label>Listing Type <span class="req">*</span></label>
+                <select id="f-listing-type">
+                  <option value="">Sale or Lease?</option>
+                  <option value="Sale">For Sale</option>
+                  <option value="Lease">For Lease</option>
+                </select>
+                <div class="fz-error-text">Please select listing type.</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-size">
+                <label>Land Size <span class="req">*</span></label>
+                <div class="fz-input-unit-row">
+                  <input type="number" id="f-size" placeholder="e.g. 5" min="0.1" step="0.1"/>
+                  <select id="f-size-unit">
+                    <option value="acres">Acres</option>
+                    <option value="bigha">Bigha</option>
+                    <option value="hectares">Hectares</option>
+                    <option value="sq ft">Sq Ft</option>
+                  </select>
+                </div>
+                <div class="fz-error-text">Please enter land size.</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-price">
+                <label>Price <span class="req">*</span></label>
+                <div class="fz-input-unit-row">
+                  <input type="number" id="f-price" placeholder="e.g. 500000" min="0"/>
+                  <select id="f-price-unit">
+                    <option value="total">Total (₹)</option>
+                    <option value="per acre">Per Acre</option>
+                    <option value="per month">Per Month</option>
+                    <option value="per year">Per Year</option>
+                  </select>
+                </div>
+                <div class="fz-error-text">Please enter price.</div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="fz-form-group">
+                <label>Description</label>
+                <textarea id="f-desc" rows="3" placeholder="Soil type, water source, nearby facilities, road access..."></textarea>
+              </div>
+            </div>
+
+            <!-- Features checkboxes -->
+            <div class="col-12">
+              <label class="fz-field-label mb-2">Features</label>
+              <div class="fz-features-grid">
+                <label class="fz-feature-check"><input type="checkbox" value="Water Source"/> 💧 Water Source</label>
+                <label class="fz-feature-check"><input type="checkbox" value="Road Access"/> 🛣️ Road Access</label>
+                <label class="fz-feature-check"><input type="checkbox" value="Electricity"/> ⚡ Electricity</label>
+                <label class="fz-feature-check"><input type="checkbox" value="Fencing"/>     🔒 Fencing</label>
+                <label class="fz-feature-check"><input type="checkbox" value="Tube Well"/>   🪣 Tube Well</label>
+                <label class="fz-feature-check"><input type="checkbox" value="Storage"/>     🏚️ Storage</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="fz-form-divider"></div>
+          <div class="fz-section-label">Location & Contact</div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="fz-form-group" id="grp-location">
+                <label>Village / City <span class="req">*</span></label>
+                <input type="text" id="f-location" placeholder="e.g. Jaipur, Rajasthan"/>
+                <div class="fz-error-text">Please enter location.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="fz-form-group">
+                <label>Pincode</label>
+                <input type="text" id="f-pincode" placeholder="e.g. 302001" maxlength="6"/>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="fz-form-group" id="grp-phone">
+                <label>Contact Number <span class="req">*</span></label>
+                <input type="tel" id="f-phone" placeholder="e.g. 9876543210" maxlength="10"/>
+                <div class="fz-error-text">Enter valid 10-digit number.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fz-form-divider"></div>
+
+          <div class="d-flex gap-2">
+            <button class="fz-btn-submit" onclick="submitListing()">🌱 Publish Listing</button>
+            <button class="fz-btn-cancel" onclick="showTab('my-listings')">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ── INQUIRY MODAL ── -->
+<div class="fz-modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="fz-modal" id="modal">
+    <button class="fz-modal-close" onclick="closeModal()">✕</button>
+
+    <!-- Land Info -->
+    <div class="fz-modal-land-icon" id="m-icon">🌾</div>
+    <div class="fz-modal-type"   id="m-type"></div>
+    <div class="fz-modal-title"  id="m-title"></div>
+    <div class="fz-modal-price"  id="m-price"></div>
+
+    <div class="fz-modal-tags" id="m-tags"></div>
+
+    <div class="fz-modal-details">
+      <div class="fz-modal-detail-item"><div class="fz-md-label">SIZE</div>    <div class="fz-md-value" id="m-size"></div></div>
+      <div class="fz-modal-detail-item"><div class="fz-md-label">LOCATION</div><div class="fz-md-value" id="m-location"></div></div>
+      <div class="fz-modal-detail-item"><div class="fz-md-label">TYPE</div>    <div class="fz-md-value" id="m-ltype"></div></div>
+      <div class="fz-modal-detail-item"><div class="fz-md-label">OWNER</div>   <div class="fz-md-value" id="m-owner"></div></div>
+    </div>
+
+    <p class="fz-modal-desc" id="m-desc"></p>
+
+    <div class="fz-modal-divider"></div>
+
+    <!-- Inquiry Form -->
+    <div class="fz-inquiry-section">
+      <h4 class="fz-inquiry-title">📩 Send Inquiry</h4>
+      <div class="fz-form-group mb-3" id="grp-inq-name">
+        <label>Your Name <span class="req">*</span></label>
+        <input type="text" id="inq-name" placeholder="Your full name"/>
+        <div class="fz-error-text">Required</div>
+      </div>
+      <div class="fz-form-group mb-3" id="grp-inq-phone">
+        <label>Phone Number <span class="req">*</span></label>
+        <input type="tel" id="inq-phone" placeholder="9876543210" maxlength="10"/>
+        <div class="fz-error-text">Enter valid 10-digit number</div>
+      </div>
+      <div class="fz-form-group mb-3">
+        <label>Message</label>
+        <textarea id="inq-message" rows="2" placeholder="I'm interested in this land. Please contact me."></textarea>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="fz-btn-inquire" onclick="submitInquiry()">📩 Send Inquiry</button>
+        <button class="fz-btn-whatsapp" onclick="whatsappOwner()">💬 WhatsApp</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="fz-toast" id="toast"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Farmizen JS -->
+<script src="js/app.js"></script>
+<script src="js/farmland.js"></script>
+
+</body>
+</html>

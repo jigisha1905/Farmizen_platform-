@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Confirmed — Farmizen</title>
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <!-- Farmizen Success CSS -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/common.css"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar navbar-expand-lg fz-navbar sticky-top px-3">
+  <div class="container-fluid">
+    <a href="index.html" class="navbar-brand d-flex align-items-center gap-2">
+      <div class="fz-brand-icon">🌿</div>
+      <span class="fz-brand-name">Farmizen</span>
+    </a>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item"><a href="marketplace.html" class="nav-link fz-nav-link">Marketplace</a></li>
+        <li class="nav-item"><a href="farmland.html"    class="nav-link fz-nav-link">Farmland</a></li>
+        <li class="nav-item"><a href="learning.html"    class="nav-link fz-nav-link">Learn</a></li>
+        <li class="nav-item"><a href="community.html"   class="nav-link fz-nav-link">Community</a></li>
+        <li class="nav-item"><a href="farmstay.html"    class="nav-link fz-nav-link">Farmstays</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<div class="container-xl py-5 pb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <!-- ── SUCCESS CARD ── -->
+      <div class="fz-success-card text-center">
+
+        <!-- Animated checkmark -->
+        <div class="fz-check-wrap">
+          <div class="fz-check-circle">
+            <svg viewBox="0 0 52 52" class="fz-check-svg">
+              <circle class="fz-check-ring" cx="26" cy="26" r="24" fill="none"/>
+              <path  class="fz-check-tick" fill="none" d="M14 27l8 8 16-16"/>
+            </svg>
+          </div>
+        </div>
+
+        <h1 class="fz-success-title mt-4">Order Confirmed! 🎉</h1>
+        <p class="fz-success-sub">Thank you for your order. The farmer has been notified and will contact you soon.</p>
+
+        <!-- Order ID badge -->
+        <div class="fz-order-id-badge mt-3">
+          Order ID: <strong id="order-id">FZ000000</strong>
+          <button class="fz-copy-btn" onclick="copyOrderId()" title="Copy">📋</button>
+        </div>
+
+        <!-- Divider -->
+        <div class="fz-divider mt-4"></div>
+
+        <!-- ── ORDER TIMELINE ── -->
+        <div class="fz-timeline mt-4">
+          <div class="fz-timeline-item active" id="tl-placed">
+            <div class="fz-tl-dot">✓</div>
+            <div class="fz-tl-content">
+              <div class="fz-tl-title">Order Placed</div>
+              <div class="fz-tl-sub" id="tl-placed-time">Just now</div>
+            </div>
+          </div>
+          <div class="fz-timeline-line"></div>
+          <div class="fz-timeline-item pending" id="tl-confirmed">
+            <div class="fz-tl-dot">2</div>
+            <div class="fz-tl-content">
+              <div class="fz-tl-title">Farmer Confirmed</div>
+              <div class="fz-tl-sub">Within 2 hours</div>
+            </div>
+          </div>
+          <div class="fz-timeline-line"></div>
+          <div class="fz-timeline-item pending" id="tl-dispatch">
+            <div class="fz-tl-dot">3</div>
+            <div class="fz-tl-content">
+              <div class="fz-tl-title">Out for Delivery</div>
+              <div class="fz-tl-sub">Tomorrow morning</div>
+            </div>
+          </div>
+          <div class="fz-timeline-line"></div>
+          <div class="fz-timeline-item pending" id="tl-delivered">
+            <div class="fz-tl-dot">4</div>
+            <div class="fz-tl-content">
+              <div class="fz-tl-title">Delivered</div>
+              <div class="fz-tl-sub">Within 1–2 days</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fz-divider mt-4"></div>
+
+        <!-- ── ORDER DETAILS ── -->
+        <div class="fz-order-details mt-4">
+          <div class="fz-details-title">Order Details</div>
+
+          <!-- Items -->
+          <div id="order-items-list" class="mt-3"></div>
+
+          <!-- Totals -->
+          <div class="fz-total-block mt-3">
+            <div class="fz-total-row">
+              <span>Subtotal</span>
+              <span>₹<span id="order-subtotal">0</span></span>
+            </div>
+            <div class="fz-total-row">
+              <span>Delivery</span>
+              <span class="fz-free-tag">FREE</span>
+            </div>
+            <div class="fz-total-divider"></div>
+            <div class="fz-total-row grand">
+              <span>Total Paid</span>
+              <span>₹<span id="order-total">0</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fz-divider mt-4"></div>
+
+        <!-- ── DELIVERY INFO ── -->
+        <div class="fz-delivery-info mt-4">
+          <div class="fz-details-title">Delivery Info</div>
+          <div class="fz-info-grid mt-3">
+            <div class="fz-info-item">
+              <div class="fz-info-label">Deliver To</div>
+              <div class="fz-info-value" id="deliver-to">—</div>
+            </div>
+            <div class="fz-info-item">
+              <div class="fz-info-label">Phone</div>
+              <div class="fz-info-value" id="deliver-phone">—</div>
+            </div>
+            <div class="fz-info-item">
+              <div class="fz-info-label">Address</div>
+              <div class="fz-info-value" id="deliver-address">—</div>
+            </div>
+            <div class="fz-info-item">
+              <div class="fz-info-label">Payment</div>
+              <div class="fz-info-value" id="deliver-payment">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fz-divider mt-4"></div>
+
+        <!-- ── FARMER CONTACT ── -->
+        <div class="fz-farmer-note mt-4">
+          <div class="fz-farmer-note-icon">👨‍🌾</div>
+          <div>
+            <div class="fz-farmer-note-title">Farmer will contact you</div>
+            <div class="fz-farmer-note-sub">You'll receive a call or WhatsApp message to confirm pickup/delivery time.</div>
+          </div>
+        </div>
+
+        <!-- ── ACTION BUTTONS ── -->
+        <div class="d-flex flex-column gap-2 mt-4">
+          <a href="marketplace.html" class="fz-btn-primary">
+            🌿 Continue Shopping
+          </a>
+          <button class="fz-btn-secondary" onclick="downloadReceipt()">
+            📄 Download Receipt
+          </button>
+          <a href="index.html" class="fz-btn-ghost">
+            Back to Home
+          </a>
+        </div>
+
+      </div>
+      <!-- /success card -->
+
+      <!-- ── RECOMMENDED ── -->
+      <div class="mt-5">
+        <div class="fz-rec-title">You might also like</div>
+        <div class="row g-3 mt-2" id="rec-grid"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Farmizen Success JS -->
+<script src="js/success.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
