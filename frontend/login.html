@@ -86,33 +86,68 @@
   }
 
   // LOGIN VALIDATION (REALISTIC BASIC VALIDATION)
-  function loginUser() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
 
-    // Empty check
-    if (!email || !password) {
-      alert("Please fill all fields!");
-      return;
-    }
+  // LOGIN WITH BACKEND API
+async function loginUser() {
 
-    // Email format check
-    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-    if (!email.match(emailPattern)) {
-      alert("Enter a valid email!");
-      return;
-    }
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-    // Password length check
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters!");
-      return;
-    }
-
-    // SUCCESS (redirect to dashboard)
-    alert("Login Successful!");
-    window.location.href = "dashboard.html";
+  // Empty check
+  if (!email || !password) {
+    alert("Please fill all fields!");
+    return;
   }
+
+  // Email format check
+  const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+  if (!email.match(emailPattern)) {
+    alert("Enter a valid email!");
+    return;
+  }
+
+  try {
+
+    const response = await fetch(
+      "http://localhost:5000/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+
+      // JWT Token Save
+      localStorage.setItem("token", data.token);
+
+      alert("Login Successful!");
+
+      window.location.href = "dashboard.html";
+
+    } else {
+
+      alert(data.message);
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+    alert("Server Error! Backend is not running.");
+
+  }
+
+}
 
 </script>
 

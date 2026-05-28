@@ -18,7 +18,7 @@ const product = {
   qty:       80,
   location:  'Jaipur, Rajasthan',
   pincode:   '302001',
-  phone:     '9876543210',
+  phone:     '8107161922',
   available: true,
   farmer:    'Ramesh Sharma',
   desc:      'Freshly harvested, no pesticides. Grown using natural compost on our family farm in Jaipur. Available for same-day pickup or can be delivered within 10km radius.',

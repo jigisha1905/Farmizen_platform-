@@ -94,56 +94,75 @@
 
 <!-- JS -->
 <script>
+async function signupUser() {
 
-  function togglePassword(fieldId, toggleId) {
-    const field = document.getElementById(fieldId);
-    const toggle = document.getElementById(toggleId);
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+  const role = document.getElementById("role").value;
 
-    if (field.type === "password") {
-      field.type = "text";
-      toggle.classList.remove("fa-eye");
-      toggle.classList.add("fa-eye-slash");
+  const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+  if (!name || !email || !phone || !password || !confirmPassword || !role) {
+    alert("All fields are required!");
+    return;
+  }
+
+  if (!emailPattern.test(email)) {
+    alert("Enter valid email!");
+    return;
+  }
+
+  if (password.length < 6) {
+    alert("Password must be at least 6 characters!");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  try {
+
+    const response = await fetch(
+      "http://localhost:5000/api/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+
+      alert("Signup Successful!");
+      window.location.href = "login.html";
+
     } else {
-      field.type = "password";
-      toggle.classList.remove("fa-eye-slash");
-      toggle.classList.add("fa-eye");
+
+      alert(data.message);
+
     }
+
+  } catch (error) {
+
+    console.error(error);
+    alert("Server Error! Backend is not running.");
+
   }
 
-  function signupUser() {
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const confirmPassword = document.getElementById("confirmPassword").value.trim();
-    const role = document.getElementById("role").value;
-
-    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-
-    if (!name || !email || !phone || !password || !confirmPassword || !role) {
-      alert("All fields are required!");
-      return;
-    }
-
-    if (!emailPattern.test(email)) {
-      alert("Enter valid email!");
-      return;
-    }
-
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters!");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-
-    alert("Signup successful!");
-    window.location.href = "login.html";
-  }
-
+}
 </script>
 
 </body>
